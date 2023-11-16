@@ -5,7 +5,7 @@ def custom_round(number, value):
     #print(number_str)
     # Флаг для определения, находимся ли мы в дробной части
     in_fractional_part = False
-    num_size = len(non_fract_part) - 2
+    num_size = len(non_fract_part)
     #print(num_size)
     # Перебираем цифры слева направо
     for i in range(len(number_str)):
@@ -14,7 +14,7 @@ def custom_round(number, value):
         # Если встретили точку, переключаемся в режим дробной части
         if char == '.':
             in_fractional_part = True
-            
+            num_size = num_size - 2
             continue
 
         # Если встретили цифру
@@ -28,48 +28,49 @@ def custom_round(number, value):
                 if digit in range(1, 3) and in_fractional_part:
                     result1 = round(number, i)
                     result2 = round(value, i)
-                    return (result1, result2)
+                    return (result1, result2, in_fractional_part)
                 # Если цифра от 3 до 9 и находимся в дробной части, округляем до первой цифры
                 elif digit in range(3, 10) and in_fractional_part:
                     result1 = round(number, i-1)
                     result2 = round(value, i-1)
-                    return (result1, result2)
+                    return (result1, result2, in_fractional_part)
                 # Если цифра от 1 до 2 и находимся в целой части, округляем до следующей цифры
                 elif digit in range(1, 3) and not in_fractional_part:
                     result1 = round(number, -num_size+2)
                     result2 = round(value, -num_size+2)
-                    return (result1, result2)
+                    return (result1, result2, in_fractional_part)
                 # Если цифра от 3 до 9 и находимся в целой части, округляем до первой цифры
                 elif digit in range(3, 10) and not in_fractional_part:
                     result1 = round(number, -num_size+1)
                     result2 = round(value, -num_size+1)
-                    return (result1, result2)
+                    return (result1, result2, in_fractional_part)
                 # Если цифра равна 0, пропускаем и идем дальше
                 elif digit == 0:
                     continue
     
 
 # Пример использования
-input_number = 0.7634
-meas = 1050.546456475
+input_number = 678
+meas = 123357
 rounded_result = custom_round(input_number, meas)
 err_str = str(rounded_result[0])
-err_str_frac = err_str.split('.')[1]
-digit = int(err_str_frac)
+
+
+if rounded_result[2] == True:
+    err_str_frac = err_str.split('.')[1]
+    digit = int(err_str_frac)
 #print(digit)
-
-
-
-
-
-
-round_v = len(err_str_frac)
-if digit == 0:
-    result = f"{rounded_result[1]:.0f}±{rounded_result[0]:.0f}"
+    round_v = len(err_str_frac)
+    if digit == 0:
+        result = f"{rounded_result[1]:.0f}±{rounded_result[0]:.0f}"
     #print("intnumber")
-elif digit != 0:
-    result = f"{rounded_result[1]:.{round_v}f}±{rounded_result[0]:.{round_v}f}"
+    elif digit != 0:
+        result = f"{rounded_result[1]:.{round_v}f}±{rounded_result[0]:.{round_v}f}"
     #print("dec_number")
+elif rounded_result[2] == False:
+    result = f"{rounded_result[1]:.0f}±{rounded_result[0]:.0f}"
+
+
 #print(err_str.split('.')[1])
 #print(round_v)
 print(result)
