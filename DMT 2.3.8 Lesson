@@ -1,0 +1,61 @@
+def custom_round(number, value):
+    # Преобразуем число в строку
+    number_str = str(number)
+    non_fract_part = str(round(number,0))
+    print(number_str)
+    # Флаг для определения, находимся ли мы в дробной части
+    in_fractional_part = False
+    num_size = len(non_fract_part) - 2
+    print(num_size)
+    # Перебираем цифры слева направо
+    for i in range(len(number_str)):
+        char = number_str[i]
+
+        # Если встретили точку, переключаемся в режим дробной части
+        if char == '.':
+            in_fractional_part = True
+            
+            continue
+
+        # Если встретили цифру
+        if char.isdigit():
+            digit = int(char)
+           
+
+            # Если встретили первую цифру, не равную 0
+            if digit != 0:
+                # Если цифра от 1 до 2 и находимся в дробной части, округляем до следующей цифры
+                if digit in range(1, 3) and in_fractional_part:
+                    result1 = round(number, i)
+                    result2 = round(value, i)
+                    return (result1, result2)
+                # Если цифра от 3 до 9 и находимся в дробной части, округляем до первой цифры
+                elif digit in range(3, 10) and in_fractional_part:
+                    result1 = round(number, i-1)
+                    result2 = round(value, i-1)
+                    return (result1, result2)
+                # Если цифра от 1 до 2 и находимся в целой части, округляем до следующей цифры
+                elif digit in range(1, 3) and not in_fractional_part:
+                    result1 = round(number, -num_size+2)
+                    result2 = round(value, -num_size+2)
+                    return (result1, result2)
+                # Если цифра от 3 до 9 и находимся в целой части, округляем до первой цифры
+                elif digit in range(3, 10) and not in_fractional_part:
+                    result1 = round(number, -num_size+1)
+                    result2 = round(value, -num_size+1)
+                    return (result1, result2)
+                # Если цифра равна 0, пропускаем и идем дальше
+                elif digit == 0:
+                    continue
+    
+
+# Пример использования
+input_number = 0.01234
+meas = 0.1
+rounded_result = custom_round(input_number, meas)
+err_str = str(rounded_result[0])
+err_str_frac = err_str.split('.')[1]
+round_v = len(err_str_frac)
+
+print(round_v)
+print(rounded_result)
