@@ -2,11 +2,11 @@ def custom_round(number, value):
     # Преобразуем число в строку
     number_str = str(number)
     non_fract_part = str(round(number,0))
-    print(number_str)
+    #print(number_str)
     # Флаг для определения, находимся ли мы в дробной части
     in_fractional_part = False
     num_size = len(non_fract_part) - 2
-    print(num_size)
+    #print(num_size)
     # Перебираем цифры слева направо
     for i in range(len(number_str)):
         char = number_str[i]
@@ -50,12 +50,26 @@ def custom_round(number, value):
     
 
 # Пример использования
-input_number = 0.01234
-meas = 0.1
+input_number = 0.7634
+meas = 1050.546456475
 rounded_result = custom_round(input_number, meas)
 err_str = str(rounded_result[0])
 err_str_frac = err_str.split('.')[1]
-round_v = len(err_str_frac)
+digit = int(err_str_frac)
+#print(digit)
 
-print(round_v)
-print(rounded_result)
+
+
+
+
+
+round_v = len(err_str_frac)
+if digit == 0:
+    result = f"{rounded_result[1]:.0f}±{rounded_result[0]:.0f}"
+    #print("intnumber")
+elif digit != 0:
+    result = f"{rounded_result[1]:.{round_v}f}±{rounded_result[0]:.{round_v}f}"
+    #print("dec_number")
+#print(err_str.split('.')[1])
+#print(round_v)
+print(result)
